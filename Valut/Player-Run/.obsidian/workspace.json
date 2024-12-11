@@ -20,20 +20,65 @@
             }
           },
           {
-            "id": "95457c1da7fb0724",
+            "id": "63cc9d4f45ec8758",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "kanban",
+              "state": {
+                "file": "To do Code.md",
+                "kanbanViewState": {
+                  "kanban-plugin": "board",
+                  "list-collapse": [
+                    false,
+                    false,
+                    false,
+                    false
+                  ]
+                }
+              },
+              "pinned": true,
+              "icon": "lucide-trello",
+              "title": "To do Code"
+            }
+          },
+          {
+            "id": "7cef47838613a937",
+            "type": "leaf",
+            "state": {
+              "type": "kanban",
+              "state": {
+                "file": "To do Code.md",
+                "kanbanViewState": {
+                  "kanban-plugin": "board",
+                  "list-collapse": [
+                    false,
+                    false,
+                    false,
+                    false
+                  ]
+                }
+              },
+              "icon": "lucide-trello",
+              "title": "To do Code"
+            }
+          },
+          {
+            "id": "80ff799176d60bf6",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Идея игры.md",
+                "file": "Game/Механики/Управление игрока.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Идея игры"
+              "title": "Управление игрока"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -167,16 +212,24 @@
       "canvas:Создать новый холст": false,
       "daily-notes:Сегодняшняя заметка": false,
       "templates:Вставить шаблон": false,
-      "command-palette:Открыть палитру команд": false
+      "command-palette:Открыть палитру команд": false,
+      "obsidian-kanban:Создать новую доску": false
     }
   },
-  "active": "ce891b68fd90e204",
+  "active": "80ff799176d60bf6",
   "lastOpenFiles": [
-    "Идея игры.md",
-    "Сцены/Игра.md",
-    "Сцены/Лобби.md",
-    "Сцены/Офлайн лобби.md",
-    "Сцены",
+    "Game/Механики/Управление игрока.md",
+    "To do Code.md",
+    "Game/Сцены/Лобби.md",
+    "Game/Без названия",
+    "Game/Механики/Matchmaking.md",
+    "Game/Механики",
+    "Game",
+    "Cache",
+    "Game/Идея игры.md",
+    "Game/Сцены/Офлайн лобби.md",
+    "Game/Сцены/Игра.md",
+    "Game/Сцены",
     "Добро пожаловать.md"
   ]
 }

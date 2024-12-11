@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Mirror;
 using UnityEngine;
 
@@ -10,31 +12,48 @@ public class MatchManager : NetworkBehaviour
     
     [SerializeField] private int roomLimit = 6;
     
-    private Dictionary<Guid, List<NetworkConnection>> roomPlayers = new();
-    private List<Guid> rooms = new();
+    private Dictionary<Guid, List<NetworkConnection>> roomPlayers = new Dictionary<Guid, List<NetworkConnection>>();
+    private List<Guid> rooms = new List<Guid>();
 
     private void Awake()
     {
         singletone = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     private Guid CreateRoom()
     {
         Guid roomId = Guid.NewGuid();
-        Debug.Log(roomId);
         
-        roomPlayers.Add(roomId, new());
+        roomPlayers.Add(roomId, new List<NetworkConnection>());
         rooms.Add(roomId);
 
         return roomId;
     }
 
-    public Guid JoinRoom(NetworkConnection conn)
+    [Server]
+    public Guid JoinRoom(NetworkConnectionToClient conn)
     {
+        try
+        {
+            if (conn.identity == null)
+            {
+                (NetworkManager.singleton as CustomNetworkManager).CreatePlayerForConnection(conn);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        
         Guid roomId = GetRoom();
-        conn.identity.gameObject.GetComponent<NetworkMatch>().matchId = roomId;
-        roomPlayers[roomId].Add(conn);
-        CheckRoomStatus(roomId);
+        //conn.identity.gameObject.GetComponent<NetworkMatch>().matchId = roomId;
+        if (roomId != Guid.Empty)
+        {
+            roomPlayers[roomId].Add(conn.identity.connectionToServer);
+            CheckRoomStatus(roomId);
+        }
+       
         return roomId;
     }
 
@@ -42,7 +61,7 @@ public class MatchManager : NetworkBehaviour
     {
         if (roomPlayers[roomId].Count >= roomLimit)
         {
-            StartGame(roomId);
+            StartCoroutine(StartGame(roomId));
         }else if (roomPlayers[roomId].Count <= 0)
         {
             rooms.Remove(roomId);
@@ -50,31 +69,41 @@ public class MatchManager : NetworkBehaviour
         }
     }
 
-    private void StartGame(Guid roomId)
+    private IEnumerator StartGame(Guid roomId)
     {
-        foreach (var conn in NetworkServer.connections.Values)
-        {
-            var matchNetwork = conn.identity.GetComponent<NetworkMatch>();
-
-            if (matchNetwork != null && matchNetwork.matchId == roomId)
-            {
-                conn.Send(new SceneMessage() { sceneName = "Game", sceneOperation = SceneOperation.Normal});
-            }
-        }
+        yield return new WaitForSeconds(0.2f);
+        // foreach (NetworkConnection conn in NetworkServer.connections.Values)
+        // {
+        //     try
+        //     {
+        //         Debug.LogWarning(conn.identity.gameObject.name);
+        //         if (conn.identity != null)
+        //         {
+        //             var matchNetwork = conn.identity.GetComponent<NetworkMatch>();
+        //
+        //             if (matchNetwork != null && matchNetwork.matchId == roomId)
+        //             {
+        //                 conn.Send(new SceneMessage() { sceneName = "Game", sceneOperation = SceneOperation.Normal });
+        //             }
+        //         }
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Debug.LogError(e);
+        //     }
+        //     
+        // }
+        NetworkManager.singleton.ServerChangeScene("Game");
     }
 
     private Guid GetRoom()
     {
-        if (rooms.Count > 0)
+        foreach (Guid roomId in rooms)
         {
-            foreach (Guid roomId in rooms)
+            if (roomPlayers[roomId].Count < roomLimit)
             {
-                if (roomPlayers[roomId].Count < roomLimit)
-                {
-                    return roomId;
-                }
+                return roomId;
             }
-
         }
         
         return CreateRoom();

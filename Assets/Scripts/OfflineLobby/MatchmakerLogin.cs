@@ -25,20 +25,17 @@ public class MatchmakerLogin : MonoBehaviour
     public void Join()
     {
         NetworkManager.singleton.StartClient();
-        Invoke(nameof(CheckServerConnection), 1f);
+        Invoke(nameof(CheckServerConnection), 2f);
     }
     
     private void CheckServerConnection()
     {
+        Debug.Log(123);
         if (!NetworkClient.isConnected)
         {
             Debug.Log("No server found. Starting as Host...");
             NetworkManager.singleton.StopClient(); // Ensure client stops before switching
             NetworkManager.singleton.StartHost();
-        }
-        else
-        {
-            Debug.Log("Connected to the server as Client.");
         }
     }
 }

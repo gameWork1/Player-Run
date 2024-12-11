@@ -49,6 +49,8 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  delay: 1
+  _identity: {fileID: 5244600773523360642}
 --- !u!114 &7523498254809705322
 MonoBehaviour:
   m_ObjectHideFlags: 0
